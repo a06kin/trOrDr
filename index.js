@@ -50,7 +50,7 @@ app.listen(app.get('port'), function() {
   console.log("Node app is running at localhost:" + app.get('port'));
 });
 
-var client = new Client(process.env.DATABASE_URL);
+var client = new pg.Client(process.env.DATABASE_URL);
 client.connect();
 
 var getAllQ = function (req, res) {
