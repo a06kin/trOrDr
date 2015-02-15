@@ -30,6 +30,14 @@ app.get('/', function(req, res) {
   res.render("index");
 });
 
+app.get('/r', function(req, res) {
+  res.render("random");
+});
+
+app.get('/rr', function(req, res) {
+  getR(req, res);
+});
+
 app.get('/q',function (req, res) {
   getAllQ(req, res);
 });
@@ -51,6 +59,7 @@ app.listen(app.get('port'), function() {
 });
 
 var client = new pg.Client(process.env.DATABASE_URL);
+// var client = new pg.Client('postgres://postgres:postgres@localhost:5432/trordr');
 client.connect();
 
 var getAllQ = function (req, res) {
@@ -73,6 +82,13 @@ var getqc = function (req, res) {
   client.query('SELECT COUNT(q) FROM qq', function(err, result) {
     if(err) console.log(err);
     res.send(result.rows[0].count)
+  });
+}
+
+var getR = function (req, res) {
+  client.query('SELECT * FROM qq OFFSET floor(random() * (SELECT COUNT(*) FROM qq)) LIMIT 1 ;', function(err, result) {
+    if(err) console.log(err);
+    res.send(result.rows[0].q)
   });
 }
 

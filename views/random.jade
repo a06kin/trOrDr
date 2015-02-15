@@ -1,0 +1,34 @@
+doctype html
+html(lang="en")
+  head
+    title= pageTitle
+    link(type="text/css",rel="stylesheet",href="css/materialize.min.css",media="screen,projection")
+    link(href="main.css",rel="stylesheet")
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js")
+    script(type="text/javascript",src="js/materialize.min.js")
+    script(type='text/javascript').
+      
+      function r(){
+        $("#q").text("");
+        $.ajax({
+          type: "GET",
+          url: "rr",
+        }).done(function( msg ) {
+          $("#q").text(msg);
+        });
+      }
+      
+      $(function() {
+        r()
+      });
+  body
+    div.row
+      div.col.s6.offset-s3.center-align
+        h5 Правда или shot
+    div.row
+      div.col.s12.center-align
+        h1#q
+    div#form.row
+      div.col.s6.offset-s3.center-align
+        a.waves-effect.waves-light.btn(onclick="r()") Новый вопрос
+          i.mdi-action-autorenew.right
