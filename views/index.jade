@@ -1,0 +1,73 @@
+doctype html
+html(lang="en")
+  head
+    title= pageTitle
+    link(type="text/css",rel="stylesheet",href="css/materialize.min.css",media="screen,projection")
+    link(href="main.css",rel="stylesheet")
+    script(src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js")
+    script(type="text/javascript",src="js/materialize.min.js")
+    script(type='text/javascript').
+      function save(){
+        form = $("#q");
+        if (!form.val().trim()) {
+          toast('empty', 1000)
+        }else{
+          $.ajax({
+            type: "POST",
+            url: "q",
+            data: form.serializeArray()
+          }).done(function( msg ) {
+            toast('saved', 4000)
+            form.val("");
+            qq();
+            qc();
+          });
+        }
+      }
+      
+      function qq(){
+        $("#qq").empty();
+        $.ajax({
+          type: "GET",
+          url: "q",
+        }).done(function( msg ) {
+          for (i = 0; i < msg.length; i++) {
+            var li = $('<li/>')
+            .addClass("collection-item")
+            .text(msg[i].q)
+            .appendTo($("#qq"));
+          }
+        });
+      }
+      
+      function qc(){
+        $.ajax({
+          type: "GET",
+          url: "qc",
+        }).done(function( msg ) {
+          $("#qc").text("Всего вопросов " + msg);
+        });
+      }
+      
+      $(function() {
+        qc();
+        qq();
+        
+      });
+  body
+    div.row
+      div.col.s6.offset-s3.center-align
+        h1 Правда или shot
+    div.row
+      div.col.s6.offset-s3.center-align
+        h5#qc
+    div#form.row
+      div.col.s6.offset-s3.center-align
+        div.input-field
+          input#q(name="q", type="text")
+        a.waves-effect.waves-light.btn(onclick="save()") save
+          i.mdi-content-save.right
+          
+    div#con.row
+      div.col.s8.offset-s2.center-align
+        ul#qq.collection
